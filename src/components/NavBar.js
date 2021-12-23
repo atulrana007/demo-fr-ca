@@ -48,6 +48,16 @@ const NavBar = () => {
                   Home
                 </NavLink>
               </NavItem>
+              <NavItem>
+                <NavLink
+                  tag={RouterNavLink}
+                  to="/otp"
+                  exact
+                  activeClassName="router-link-exact-active"
+                >
+                  OTP
+                </NavLink>
+              </NavItem>
               {isAuthenticated && (
                 <NavItem>
                   <NavLink
@@ -127,7 +137,7 @@ const NavBar = () => {
                     block
                     onClick={() =>
                       loginWithRedirect({
-                        fragment: "culture=en-us&aff_id=0",
+                        fragment: "culture=en-us&affid=0",
                       })
                     }
                   >

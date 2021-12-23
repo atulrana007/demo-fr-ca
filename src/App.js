@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Router, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
 
@@ -16,9 +16,22 @@ import "./App.css";
 
 // fontawesome
 import initFontAwesome from "./utils/initFontAwesome";
+import OTP from "./components/otp";
+import Tokens from "./components/Tokens";
+import OTPFill from "./components/OTPFill";
+import ID from "./components/ID";
+import Access from "./components/Access";
+import Refresh from "./components/Refresh";
 initFontAwesome();
 
 const App = () => {
+  const [detailsState, setDetailsState] = useState({
+    email: "",
+    otp: "",
+    accessToken: "",
+    idToken: "",
+    refreshToken: "",
+  });
   const { isLoading, error } = useAuth0();
 
   if (error) {
@@ -35,9 +48,45 @@ const App = () => {
         <NavBar />
         <Container className="flex-grow-1 mt-5">
           <Switch>
-            <Route path="/" exact component={Home} />
+            <Route path="/" exact component={() => Home()} />
             <Route path="/profile" component={Profile} />
             <Route path="/external-api" component={ExternalApi} />
+            <Route path="/otp" exact>
+              <OTP
+                detailsState={detailsState}
+                setDetailsState={setDetailsState}
+              />
+            </Route>
+            <Route path="/verify" exact>
+              <OTPFill
+                detailsState={detailsState}
+                setDetailsState={setDetailsState}
+              />
+            </Route>
+            <Route path="/token" exact>
+              <Tokens
+                detailsState={detailsState}
+                setDetailsState={setDetailsState}
+              />
+            </Route>
+            <Route path="/parseAccessToken" exact>
+              <Access
+                detailsState={detailsState}
+                setDetailsState={setDetailsState}
+              />
+            </Route>
+            <Route path="/parseIDToken" exact>
+              <ID
+                detailsState={detailsState}
+                setDetailsState={setDetailsState}
+              />
+            </Route>
+            <Route path="/parseRefreshToken" exact>
+              <Refresh
+                detailsState={detailsState}
+                setDetailsState={setDetailsState}
+              />
+            </Route>
           </Switch>
         </Container>
         <Footer />
