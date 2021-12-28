@@ -14,7 +14,7 @@ export function getConfig() {
 
   return {
     domain: "iddev.mcafee.com",
-    clientId: "3ZJTUE1UxtqSAkHwAjOrcOSb05iCAka9",
+    clientId: "NC9HSwbcmvvXvrdvXymITAuLPw2GHbEW",
     ...(audience ? { audience } : null),
   };
 }

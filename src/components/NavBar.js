@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRef } from "react";
+
+import { useLocation } from "react-router-dom";
 
 import {
   Collapse,
@@ -21,6 +24,27 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 
 const NavBar = () => {
+  function useQuery() {
+    console.log("in the hook ", useLocation().search);
+    return new URLSearchParams(useLocation().search);
+  }
+
+  const Culture = () => {
+    let query = useQuery();
+    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
+    let culture = query.get("culture") ?? parsedHash.get("culture");
+
+    return culture;
+  };
+  const [culture, setCulture] = useState(Culture() || "en-us");
+  console.log("-------->", culture);
+  const AffId = () => {
+    let query = useQuery();
+    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
+    let culture = query.get("affid") ?? parsedHash.get("affid");
+    return culture;
+  };
+  const [affid, setAffId] = useState(AffId() || "0");
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const toggle = () => setIsOpen(!isOpen);
@@ -80,7 +104,10 @@ const NavBar = () => {
                     className="btn-margin"
                     onClick={() =>
                       loginWithRedirect({
-                        fragment: `culture=en-us&aff_id=105`,
+                        culture: culture,
+                        affid: affid,
+                        // affid: AffId(),
+                        // fragment: `culture=en-us&aff_id=105`,
                         // &aai=${JSON.stringify(
                         //   {
                         //     ea: "value",
@@ -137,7 +164,8 @@ const NavBar = () => {
                     block
                     onClick={() =>
                       loginWithRedirect({
-                        fragment: "culture=en-us&affid=0",
+                        culture: Culture(),
+                        affid: AffId(),
                       })
                     }
                   >
