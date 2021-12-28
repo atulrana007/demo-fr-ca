@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRef } from "react";
 
 import { useLocation } from "react-router-dom";
 
@@ -37,7 +36,7 @@ const NavBar = () => {
     return culture;
   };
   const [culture, setCulture] = useState(Culture() || "en-us");
-  console.log("-------->", culture);
+  console.log("-------->", setCulture);
   const AffId = () => {
     let query = useQuery();
     const parsedHash = new URLSearchParams(window.location.hash.substr(1));
@@ -45,6 +44,7 @@ const NavBar = () => {
     return culture;
   };
   const [affid, setAffId] = useState(AffId() || "0");
+  console.log(setAffId);
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const toggle = () => setIsOpen(!isOpen);
