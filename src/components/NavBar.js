@@ -27,6 +27,13 @@ const NavBar = () => {
     console.log("in the hook ", useLocation().search);
     return new URLSearchParams(useLocation().search);
   }
+  const LoginHint = () => {
+    let query = useQuery();
+    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
+    let culture = query.get("login_hint") ?? parsedHash.get("login_hint");
+
+    return culture;
+  };
 
   const Culture = () => {
     let query = useQuery();
@@ -35,8 +42,9 @@ const NavBar = () => {
 
     return culture;
   };
+  const [loginHint, setLoginHint] = useState(LoginHint() || "login");
   const [culture, setCulture] = useState(Culture() || "en-us");
-  console.log("-------->", setCulture);
+  console.log("-------->", setCulture, setLoginHint);
   const AffId = () => {
     let query = useQuery();
     const parsedHash = new URLSearchParams(window.location.hash.substr(1));
@@ -106,6 +114,8 @@ const NavBar = () => {
                       loginWithRedirect({
                         culture: culture,
                         affid: affid,
+                        ui_locales: "en",
+                        login_hint: loginHint,
                         // affid: AffId(),
                         // fragment: `culture=en-us&aff_id=105`,
                         // &aai=${JSON.stringify(
