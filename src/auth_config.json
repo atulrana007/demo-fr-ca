@@ -1,5 +1,5 @@
 {
   "domain": "iddev.mcafee.com",
   "clientId": "NC9HSwbcmvvXvrdvXymITAuLPw2GHbEW",
-  "audience": "YOUR_API_IDENTIFIER"
+  "audience": "https://api.mcafee.com"
 }
