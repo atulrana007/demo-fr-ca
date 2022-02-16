@@ -30,7 +30,8 @@ const NavBar = () => {
   const LoginHint = () => {
     let query = useQuery();
     const parsedHash = new URLSearchParams(window.location.hash.substr(1));
-    let culture = query.get("aai") ?? parsedHash.get("aai");
+    let culture =
+      query.get("aai") || parsedHash.get("aai") || JSON.stringify({ cc: "" });
 
     return culture;
   };
@@ -114,7 +115,7 @@ const NavBar = () => {
                       loginWithRedirect({
                         culture: culture,
                         affid: affid,
-                        ui_locales: "ar",
+                        ui_locales: "hi",
                         aai: loginHint,
                         // affid: AffId(),
                         // fragment: `culture=en-us&aff_id=105`,
