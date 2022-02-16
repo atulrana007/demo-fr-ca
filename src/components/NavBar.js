@@ -27,11 +27,25 @@ const NavBar = () => {
     console.log("in the hook ", useLocation().search);
     return new URLSearchParams(useLocation().search);
   }
-  const LoginHint = () => {
+  const ScreenHint = () => {
     let query = useQuery();
     const parsedHash = new URLSearchParams(window.location.hash.substr(1));
     let culture =
-      query.get("aai") || parsedHash.get("aai") || JSON.stringify({ cc: "" });
+      query.get("screen_hint") || parsedHash.get("screen_hint") || "";
+
+    return culture;
+  };
+  const ClientCustomisation = () => {
+    let query = useQuery();
+    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
+    let culture = query.get("aai") || parsedHash.get("aai") || "{}";
+
+    return culture;
+  };
+  const LoginHint = () => {
+    let query = useQuery();
+    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
+    let culture = query.get("login_hint") || parsedHash.get("login_hint") || "";
 
     return culture;
   };
@@ -43,9 +57,19 @@ const NavBar = () => {
 
     return culture;
   };
-  const [loginHint, setLoginHint] = useState(LoginHint() || "login");
+  const [screenHint, setScreenHint] = useState(ScreenHint() || "");
+  const [customisationHint, setCustomisationHint] = useState(
+    ClientCustomisation() || "{}"
+  );
+  const [loginHint, setLoginHint] = useState(LoginHint() || "");
   const [culture, setCulture] = useState(Culture() || "en-us");
-  console.log("-------->", setCulture, setLoginHint);
+  console.log(
+    "-------->",
+    setCulture,
+    setLoginHint,
+    setScreenHint,
+    setCustomisationHint
+  );
   const AffId = () => {
     let query = useQuery();
     const parsedHash = new URLSearchParams(window.location.hash.substr(1));
@@ -115,8 +139,10 @@ const NavBar = () => {
                       loginWithRedirect({
                         culture: culture,
                         affid: affid,
+                        login_hint: loginHint,
+                        screen_hint: screenHint,
                         ui_locales: "hi",
-                        aai: loginHint,
+                        aai: customisationHint,
                         // affid: AffId(),
                         // fragment: `culture=en-us&aff_id=105`,
                         // &aai=${JSON.stringify(
