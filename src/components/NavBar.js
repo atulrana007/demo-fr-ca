@@ -35,6 +35,14 @@ const NavBar = () => {
 
     return culture;
   };
+  const Ui_localesHint = () => {
+    let query = useQuery();
+    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
+    let culture =
+      query.get("screen_hint") || parsedHash.get("screen_hint") || "";
+
+    return culture;
+  };
   const ClientCustomisation = () => {
     let query = useQuery();
     const parsedHash = new URLSearchParams(window.location.hash.substr(1));
@@ -58,6 +66,7 @@ const NavBar = () => {
     return culture;
   };
   const [screenHint, setScreenHint] = useState(ScreenHint() || "");
+  const [ui_locales, setUi_locales] = useState(Ui_localesHint() || "");
   const [customisationHint, setCustomisationHint] = useState(
     ClientCustomisation() || "{}"
   );
@@ -68,7 +77,8 @@ const NavBar = () => {
     setCulture,
     setLoginHint,
     setScreenHint,
-    setCustomisationHint
+    setCustomisationHint,
+    setUi_locales
   );
   const AffId = () => {
     let query = useQuery();
@@ -141,7 +151,7 @@ const NavBar = () => {
                         affid: affid,
                         login_hint: loginHint,
                         screen_hint: screenHint,
-                        ui_locales: "hi",
+                        ui_locales: ui_locales,
                         aai: customisationHint,
                         // affid: AffId(),
                         // fragment: `culture=en-us&aff_id=105`,
