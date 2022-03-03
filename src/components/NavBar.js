@@ -38,8 +38,7 @@ const NavBar = () => {
   const Ui_localesHint = () => {
     let query = useQuery();
     const parsedHash = new URLSearchParams(window.location.hash.substr(1));
-    let culture =
-      query.get("screen_hint") || parsedHash.get("screen_hint") || "";
+    let culture = query.get("ui_locales") || parsedHash.get("ui_locales") || "";
 
     return culture;
   };
