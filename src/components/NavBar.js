@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
 
 import { useLocation } from "react-router-dom";
 
@@ -23,39 +24,41 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 
 const NavBar = () => {
+  const currentValue = useSelector((state) => state.counter.value);
+
+  const [finalState, setFinalState] = useState({});
+  useEffect(() => {
+    setFinalState({
+      culture: currentValue?.culture || "",
+      affid: currentValue?.affid || 0,
+      aai: {
+        ea: currentValue?.ea || "",
+        cc: {
+          Login:
+            currentValue?.mode !== "register"
+              ? {
+                  hideSignUp: currentValue?.hideSignUp,
+                  disableEmail: currentValue?.disableEmail,
+                }
+              : null,
+          SignUp:
+            currentValue?.mode === "register"
+              ? {
+                  hideLoginCTA: currentValue?.hideLoginCTA,
+                  disableEmail: currentValue?.disableEmail,
+                }
+              : null,
+          mode: currentValue?.mode,
+        },
+      },
+    });
+  }, [currentValue]);
+  console.log("---->In the Navbar", finalState, currentValue);
+
   function useQuery() {
     console.log("in the hook ", useLocation().search);
     return new URLSearchParams(useLocation().search);
   }
-  const ScreenHint = () => {
-    let query = useQuery();
-    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
-    let culture =
-      query.get("screen_hint") || parsedHash.get("screen_hint") || "";
-
-    return culture;
-  };
-  const Ui_localesHint = () => {
-    let query = useQuery();
-    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
-    let culture = query.get("ui_locales") || parsedHash.get("ui_locales") || "";
-
-    return culture;
-  };
-  const ClientCustomisation = () => {
-    let query = useQuery();
-    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
-    let culture = query.get("aai") || parsedHash.get("aai") || "{}";
-
-    return culture;
-  };
-  const LoginHint = () => {
-    let query = useQuery();
-    const parsedHash = new URLSearchParams(window.location.hash.substr(1));
-    let culture = query.get("login_hint") || parsedHash.get("login_hint") || "";
-
-    return culture;
-  };
 
   const Culture = () => {
     let query = useQuery();
@@ -64,29 +67,14 @@ const NavBar = () => {
 
     return culture;
   };
-  const [screenHint, setScreenHint] = useState(ScreenHint() || "");
-  const [ui_locales, setUi_locales] = useState(Ui_localesHint() || "");
-  const [customisationHint, setCustomisationHint] = useState(
-    ClientCustomisation() || "{}"
-  );
-  const [loginHint, setLoginHint] = useState(LoginHint() || "");
-  const [culture, setCulture] = useState(Culture() || "en-us");
-  console.log(
-    "-------->",
-    setCulture,
-    setLoginHint,
-    setScreenHint,
-    setCustomisationHint,
-    setUi_locales
-  );
+
   const AffId = () => {
     let query = useQuery();
     const parsedHash = new URLSearchParams(window.location.hash.substr(1));
     let culture = query.get("affid") ?? parsedHash.get("affid");
     return culture;
   };
-  const [affid, setAffId] = useState(AffId() || "0");
-  console.log(setAffId);
+
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const toggle = () => setIsOpen(!isOpen);
@@ -146,12 +134,8 @@ const NavBar = () => {
                     className="btn-margin"
                     onClick={() =>
                       loginWithRedirect({
-                        culture: culture,
-                        affid: affid,
-                        login_hint: loginHint,
-                        screen_hint: screenHint,
-                        ui_locales: ui_locales,
-                        aai: customisationHint,
+                        ...finalState,
+                        aai: JSON.stringify(finalState.aai),
                         // affid: AffId(),
                         // fragment: `culture=en-us&aff_id=105`,
                         // &aai=${JSON.stringify(

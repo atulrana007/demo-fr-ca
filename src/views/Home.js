@@ -1,28 +1,418 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 
-import Hero from "../components/Hero";
-import Content from "../components/Content";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector, useDispatch } from "react-redux";
+import { addNewKeyValuePair } from "../feature/commonState";
 
 const Home = () => {
-  const { getAccessTokenSilently } = useAuth0();
-  const GetSomething = async () => {
-    try {
-      const token = await getAccessTokenSilently({
-        audience: "https://api.mcafee.com",
-      });
-      console.log(token);
-    } catch (e) {
-      console.log(e);
-    }
+  const [togglePrefilEmail, setTogglePrefilEmail] = useState(false);
+  const [disablePrefilEmailState, disablePrefilEmail] = useState(false);
+  const [currentQuery, setCurrentQuery] = useState({
+    query: "",
+    value: "",
+    culture: "",
+    prefillEmail: "",
+    affid: "",
+    landing_screen: "login",
+    hideLoginCTA: false,
+    hideSignUp: false,
+  });
+  const currentValue = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+
+  const GetSomething = () => {
+    dispatch(
+      addNewKeyValuePair({ key: currentQuery.query, value: currentQuery.value })
+    );
+  };
+  console.log(currentValue);
+  const ChangeLanding = (e) => {
+    setCurrentQuery({
+      ...currentQuery,
+      landing_screen: e.target.value,
+    });
+    dispatch(addNewKeyValuePair({ key: "mode", value: e.target.value }));
   };
 
   return (
     <Fragment>
-      <Hero />
-      <button onClick={GetSomething}>Click Here</button>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          {Object.keys(currentValue).length !== 0 && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#0B1634",
+                color: "white",
+                padding: "4rem",
+                marginBottom: "1rem",
+                borderRadius: "2rem",
+                boxShadow:
+                  "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+                fontWeight: 600,
+                fontSize: "2rem",
+              }}
+            >
+              {Object.keys(currentValue).map((value, index) => {
+                return (
+                  <div key={`${index}1243`}>
+                    <p>
+                      {value}:{String(currentValue[value])}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <div style={{ fontWeight: 700 }}>
+            Land on Different Page
+            <select
+              style={{
+                marginLeft: "1rem",
+                marginBottom: "1rem",
+              }}
+              value={currentQuery.landing_screen}
+              onChange={ChangeLanding}
+            >
+              <option value="login">LoginPage Page(Default)</option>
+              <option value="login_otp">OTP LoginPage Page</option>
+              <option value="register">Signup Page</option>
+            </select>
+          </div>
+          {currentQuery?.landing_screen === "register" ? (
+            <div
+              style={{
+                display: "flex",
+                marginBottom: "1rem",
+                fontWeight: 700,
+              }}
+            >
+              Hide Login Redirection{" "}
+              {currentQuery?.hideLoginCTA ? (
+                <button
+                  style={{
+                    marginLeft: "1rem",
+                    borderRadius: "2rem",
+                    background: "#43CB2B",
+                    color: "white",
+                    border: "1px solid white",
+                  }}
+                  onClick={(e) => {
+                    setCurrentQuery({
+                      ...currentQuery,
+                      hideLoginCTA: false,
+                    });
+                    dispatch(
+                      addNewKeyValuePair({ key: "hideLoginCTA", value: false })
+                    );
+                  }}
+                >
+                  Yes
+                </button>
+              ) : (
+                <button
+                  style={{
+                    marginLeft: "1rem",
+                    borderRadius: "2rem",
+                    border: "1px solid white",
+                  }}
+                  onClick={(e) => {
+                    setCurrentQuery({
+                      ...currentQuery,
+                      hideLoginCTA: true,
+                    });
+                    dispatch(
+                      addNewKeyValuePair({ key: "hideLoginCTA", value: true })
+                    );
+                  }}
+                >
+                  No
+                </button>
+              )}
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                marginBottom: "1rem",
+                fontWeight: 700,
+              }}
+            >
+              Hide Signup Redirection{" "}
+              {currentQuery?.hideSignUp ? (
+                <button
+                  style={{
+                    marginLeft: "1rem",
+                    borderRadius: "2rem",
+                    background: "#43CB2B",
+                    color: "white",
+                    border: "1px solid white",
+                  }}
+                  onClick={(e) => {
+                    setCurrentQuery({
+                      ...currentQuery,
+                      hideSignUp: false,
+                    });
+                    dispatch(
+                      addNewKeyValuePair({ key: "hideSignUp", value: false })
+                    );
+                  }}
+                >
+                  Yes
+                </button>
+              ) : (
+                <button
+                  style={{
+                    marginLeft: "1rem",
+                    borderRadius: "2rem",
+                    border: "1px solid white",
+                  }}
+                  onClick={(e) => {
+                    setCurrentQuery({
+                      ...currentQuery,
+                      hideSignUp: true,
+                    });
+                    dispatch(
+                      addNewKeyValuePair({ key: "hideSignUp", value: true })
+                    );
+                  }}
+                >
+                  No
+                </button>
+              )}
+            </div>
+          )}
+
+          <div
+            style={{
+              display: "flex",
+              marginBottom: "1rem",
+              fontWeight: 700,
+            }}
+          >
+            Pre-fill Email{" "}
+            {togglePrefilEmail ? (
+              <button
+                style={{
+                  marginLeft: "1rem",
+                  borderRadius: "2rem",
+                  background: "#43CB2B",
+                  color: "white",
+                  border: "1px solid white",
+                }}
+                onClick={() => {
+                  setTogglePrefilEmail(false);
+                }}
+              >
+                Yes
+              </button>
+            ) : (
+              <button
+                style={{
+                  marginLeft: "1rem",
+                  borderRadius: "2rem",
+                  border: "1px solid white",
+                }}
+                onClick={() => {
+                  setTogglePrefilEmail(true);
+                }}
+              >
+                No
+              </button>
+            )}
+            {togglePrefilEmail ? (
+              <div
+                style={{
+                  fontWeight: 700,
+                  marginLeft: "1rem",
+                }}
+              >
+                <label>Enter Valid Email</label>{" "}
+                <input
+                  type="text"
+                  value={currentQuery.prefillEmail}
+                  style={{
+                    marginLeft: "1rem",
+                  }}
+                  onChange={(e) => {
+                    setCurrentQuery({
+                      ...currentQuery,
+                      prefillEmail: e.target.value,
+                    });
+                  }}
+                  onBlur={(e) => {
+                    dispatch(
+                      addNewKeyValuePair({ key: "ea", value: e.target.value })
+                    );
+                  }}
+                />
+              </div>
+            ) : null}
+          </div>
+          {togglePrefilEmail ? (
+            <div
+              style={{
+                margin: "1rem 0rem",
+                fontWeight: 700,
+              }}
+            >
+              DisableEmail:{" "}
+              {disablePrefilEmailState ? (
+                <button
+                  style={{
+                    marginLeft: "1rem",
+                    borderRadius: "2rem",
+                    background: "#43CB2B",
+                    color: "white",
+                    border: "1px solid white",
+                  }}
+                  onClick={() => {
+                    dispatch(
+                      addNewKeyValuePair({ key: "disableEmail", value: false })
+                    );
+                    disablePrefilEmail(false);
+                  }}
+                >
+                  Yes
+                </button>
+              ) : (
+                <button
+                  style={{
+                    marginLeft: "1rem",
+                    borderRadius: "2rem",
+                    border: "1px solid white",
+                  }}
+                  onClick={() => {
+                    dispatch(
+                      addNewKeyValuePair({ key: "disableEmail", value: true })
+                    );
+                    disablePrefilEmail(true);
+                  }}
+                >
+                  No
+                </button>
+              )}
+            </div>
+          ) : null}
+          <div
+            style={{
+              marginBottom: "1rem",
+              fontWeight: 700,
+            }}
+          >
+            Culture{" "}
+            <input
+              type="text"
+              value={currentQuery.culture}
+              style={{
+                marginLeft: "1rem",
+              }}
+              onChange={(e) => {
+                setCurrentQuery({
+                  ...currentQuery,
+                  culture: e.target.value,
+                });
+              }}
+              onBlur={(e) => {
+                dispatch(
+                  addNewKeyValuePair({ key: "culture", value: e.target.value })
+                );
+              }}
+            />
+          </div>
+          <div
+            style={{
+              marginBottom: "1rem",
+              fontWeight: 700,
+            }}
+          >
+            Affid{" "}
+            <input
+              type="text"
+              value={currentQuery.affid}
+              style={{
+                marginLeft: "1rem",
+              }}
+              onChange={(e) => {
+                setCurrentQuery({
+                  ...currentQuery,
+                  affid: e.target.value,
+                });
+              }}
+              onBlur={(e) => {
+                dispatch(
+                  addNewKeyValuePair({ key: "affid", value: e.target.value })
+                );
+              }}
+            />
+          </div>
+        </div>
+        <div
+          style={{
+            fontWeight: 700,
+            fontSize: "2rem",
+            margin: "2rem 0rem",
+          }}
+        >
+          Add Some ExtraParam
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "1rem",
+            fontWeight: 700,
+          }}
+        >
+          Enter Query Param
+          <input
+            type="text"
+            value={currentQuery.key}
+            onChange={(e) => {
+              setCurrentQuery({
+                ...currentQuery,
+                query: e.target.value,
+              });
+            }}
+          />
+          Enter Query Param Value
+          <input
+            type="text"
+            value={currentQuery.value}
+            onChange={(e) => {
+              setCurrentQuery({
+                ...currentQuery,
+                value: e.target.value,
+              });
+            }}
+          />
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button
+            style={{
+              backgroundColor: "#0065F9",
+              color: "white",
+              border: "none",
+            }}
+            onClick={GetSomething}
+          >
+            Adding QueryParams
+          </button>
+        </div>
+      </div>
       <hr />
-      <Content />
     </Fragment>
   );
 };
