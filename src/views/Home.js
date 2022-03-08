@@ -15,6 +15,7 @@ const Home = () => {
     landing_screen: "login",
     hideLoginCTA: false,
     hideSignUp: false,
+    ui_locales: "",
   });
   const currentValue = useSelector((state) => state.counter.value);
   const dispatch = useDispatch();
@@ -354,6 +355,36 @@ const Home = () => {
               onBlur={(e) => {
                 dispatch(
                   addNewKeyValuePair({ key: "affid", value: e.target.value })
+                );
+              }}
+            />
+          </div>
+          <div
+            style={{
+              marginBottom: "1rem",
+              fontWeight: 700,
+            }}
+          >
+            ui_locales{" "}
+            <input
+              type="text"
+              placeholder="for eg en-us"
+              value={currentQuery.affid}
+              style={{
+                marginLeft: "1rem",
+              }}
+              onChange={(e) => {
+                setCurrentQuery({
+                  ...currentQuery,
+                  ui_locales: e.target.value,
+                });
+              }}
+              onBlur={(e) => {
+                dispatch(
+                  addNewKeyValuePair({
+                    key: "ui_locales",
+                    value: e.target.value,
+                  })
                 );
               }}
             />
