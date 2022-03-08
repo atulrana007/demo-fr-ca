@@ -369,7 +369,7 @@ const Home = () => {
             <input
               type="text"
               placeholder="for eg en-us"
-              value={currentQuery.affid}
+              value={currentQuery.ui_locales}
               style={{
                 marginLeft: "1rem",
               }}
