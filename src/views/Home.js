@@ -239,6 +239,7 @@ const Home = () => {
                 <label>Enter Valid Email</label>{" "}
                 <input
                   type="text"
+                  placeholder="abc@dispostable.com"
                   value={currentQuery.prefillEmail}
                   style={{
                     marginLeft: "1rem",
@@ -312,6 +313,7 @@ const Home = () => {
             Culture{" "}
             <input
               type="text"
+              placeholder="Eg en-us"
               value={currentQuery.culture}
               style={{
                 marginLeft: "1rem",
@@ -338,6 +340,7 @@ const Home = () => {
             Affid{" "}
             <input
               type="text"
+              placeholder="1062 - For Dell"
               value={currentQuery.affid}
               style={{
                 marginLeft: "1rem",
