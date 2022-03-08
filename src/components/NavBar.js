@@ -31,6 +31,7 @@ const NavBar = () => {
     setFinalState({
       culture: currentValue?.culture || "",
       affid: currentValue?.affid || 0,
+      ui_locales: currentValue?.ui_locales,
       aai: {
         ea: currentValue?.ea || "",
         cc: {
