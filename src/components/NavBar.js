@@ -137,6 +137,7 @@ const NavBar = () => {
                       loginWithRedirect({
                         ...finalState,
                         aai: JSON.stringify(finalState.aai),
+                        enableSkipButton: true,
                         // affid: AffId(),
                         // fragment: `culture=en-us&aff_id=105`,
                         // &aai=${JSON.stringify(
